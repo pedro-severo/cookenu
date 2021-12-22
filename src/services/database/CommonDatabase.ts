@@ -1,18 +1,26 @@
 import Knex from "knex"
+import knex from "knex"
 import { Service } from "typedi"
-import { connection } from "./connection";
+import dotenv from "dotenv"
 
+dotenv.config()
 @Service()
 export abstract class CommonDatabase {
-    connection: Knex
-
-    constructor() {
-        this.connection = connection
-    }
+    protected static connection: Knex = knex({
+        client: "mysql",
+        connection: {
+           host: process.env.DB_HOST,
+           port: 3306,
+           user: process.env.DB_USER,
+           password: process.env.DB_PASSWORD,
+           database: process.env.DB_SCHEMA,
+           multipleStatements: true
+        }
+    })
 
     async insert(table: string, itemToAdd: Object) {
         try {
-            await this.connection(table).insert(itemToAdd)
+            await CommonDatabase.connection(table).insert(itemToAdd)
         } catch (e) {
             throw new Error("")
         }

@@ -10,7 +10,7 @@ export class RecipeDatabase extends CommonDatabase {
 
     async getRecipeById(id: string, userDatabase: UserDatabase): Promise<RecipeResponse> {
         try {
-            const result = await this.connection("recipes").select("*").where("id", id)     
+            const result = await CommonDatabase.connection("recipes").select("*").where("id", id)     
             const recipeDTO: RecipeDTO = result[0]
             const user = await userDatabase.getUserById(recipeDTO.user_id)
             const recipeResonse = mapRecipeDTOToRecipeResponse(recipeDTO, user.name)
