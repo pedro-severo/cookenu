@@ -1,7 +1,7 @@
-import { UserDatabase } from './../../services/database/User/UserDatabase';
+import { UserDatabase } from '../../database/User/UserDatabase';
 import Container, { Service } from "typedi";
-import { RecipeDatabase } from "../../services/database/Recipe/RecipeDatabase";
-import { RecipeResponse } from '../../services/database/Recipe/interfaces/RecipeResponse';
+import { RecipeDatabase } from "../../database/Recipe/RecipeDatabase";
+import { RecipeResponse } from '../../database/Recipe/interfaces/RecipeResponse';
 
 
 @Service()

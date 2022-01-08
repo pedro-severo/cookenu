@@ -1,6 +1,6 @@
-import { UserDatabase } from './../../services/database/User/UserDatabase';
+import { UserDatabase } from '../../database/User/UserDatabase';
 import Container, { Service } from "typedi";
-import { UserResponse } from '../../services/database/User/interfaces/UserResponse';
+import { UserResponse } from '../../database/User/interfaces/UserResponse';
 
 @Service()
 export class GetUserDetailUC {

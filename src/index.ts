@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import express from "express"
 import cors from "cors"
 import { AddressInfo } from "net"
-import { getRecipeDetailHandler } from "./presentation/getRecipesHandler"
+import { getRecipeDetailHandler } from "./presentation/getRecipeDetailHandler"
 import { getUserDetailHandler } from './presentation/getUserDetailHandler';
 
 export const app = express()
