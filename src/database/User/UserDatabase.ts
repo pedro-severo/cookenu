@@ -17,4 +17,9 @@ export class UserDatabase extends CommonDatabase {
             throw new Error("User not found.")
         }
     }
+
+    async validateUser(id: string): Promise<boolean> {
+        const result = await CommonDatabase.connection("users").select("id").where("id", id)     
+        return !!result[0]
+    }
 }
