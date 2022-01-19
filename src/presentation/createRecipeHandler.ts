@@ -1,3 +1,4 @@
+import { StatusCodes } from 'http-status-codes';
 import { plainToClass } from "class-transformer"
 import { validate } from "class-validator"
 import { RequestHandler } from "express"
@@ -21,7 +22,8 @@ export const createRecipeHandler: RequestHandler = async (req, res) => {
         const newRecipe = new Recipe(id, title, description, new Date())
         const useCase = Container.get(CreateRecipeUC)
         const response = await useCase.execute(newRecipe, userId)
-        res.json(response)
+        // TODO: beyond message of success, return body (title and description) in response
+        return res.status(StatusCodes.CREATED).json(response)
     } catch (err) {
         res.status(500).send(err.message)
     }
