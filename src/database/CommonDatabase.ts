@@ -18,11 +18,13 @@ export abstract class CommonDatabase {
         }
     })
 
-    async insert(table: string, itemToAdd: Object) {
+    async insert(table: string, itemToAdd: any) {
         try {
             await CommonDatabase.connection(table).insert(itemToAdd)
+            const result = await CommonDatabase.connection(table).select("*").where("id", itemToAdd.id)
+            return result[0]
         } catch (e) {
-            throw new Error("")
+            throw new Error("Error in insert query.")
         }
     }
 }

@@ -1,6 +1,6 @@
 import { StatusCodes } from 'http-status-codes';
 import { plainToClass } from "class-transformer"
-import { validate } from "class-validator"
+import { validate, ValidationError } from "class-validator"
 import { RequestHandler } from "express"
 import Container from "typedi"
 import { v4 } from "uuid"
@@ -14,17 +14,23 @@ export const createRecipeHandler: RequestHandler = async (req, res) => {
         const { userId } = req.params
 
         const inputToValidate = plainToClass(CreateRecipeInput, { title, description })
-        const errors = await validate(inputToValidate)
+        const errors: ValidationError[] = await validate(inputToValidate)
         if (errors.length) {
-            throw new Error(`Error validating input: ${errors}`)
+            return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+                message: "Error validating input",
+                errors
+            })
         }
         const id = v4()
         const newRecipe = new Recipe(id, title, description, new Date())
         const useCase = Container.get(CreateRecipeUC)
         const response = await useCase.execute(newRecipe, userId)
-        // TODO: beyond message of success, return body (title and description) in response
         return res.status(StatusCodes.CREATED).json(response)
     } catch (err) {
-        res.status(500).send(err.message)
+        console.log(err)
+        if (err.message === "Error: User not found to create a recipe.") {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: err.message })
+        }
+        res.status(500).json({ message: "Internal Server Error"})
     }
 }

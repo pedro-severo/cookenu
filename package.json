@@ -7,7 +7,7 @@
       "start": "nodemon ./src/index.ts",
       "dev": "tsnd --transpile-only --ignore-watch node_modules ./src/index.ts",
       "build": "tsc",
-      "test": "jest"
+      "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1"
    },
    "author": "",
    "license": "ISC",

@@ -15,7 +15,7 @@ export class GetUserDetailUC {
             const user = await this.userDb.getUserById(userId)
             return user
         } catch (err) {
-            throw new Error("It was not possible to get this user.");
+            throw new Error("User not found.");
         }
     }
 }

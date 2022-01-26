@@ -4,5 +4,5 @@ export interface RecipeResponse {
     title: string,
     description: string,
     creationDate: Date,
-    recipeOwner: string
+    recipeOwner?: string
 }

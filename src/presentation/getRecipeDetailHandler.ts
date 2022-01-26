@@ -1,22 +1,19 @@
-import { plainToClass } from "class-transformer"
-import { validate } from "class-validator"
 import { RequestHandler } from "express"
+import { StatusCodes } from "http-status-codes"
 import Container from "typedi"
 import { GetRecipeDetailUC } from "../useCases/Recipe/getRecipeDetailUC"
-import { GetRecipeDetailInput } from "./inputs/GetRecipeDetailInput"
 
 export const getRecipeDetailHandler: RequestHandler = async (req, res) => {
     try {
         const { recipeId } = req.params
-        const inputToValidate = plainToClass(GetRecipeDetailInput, { id: recipeId })
-        const errors = await validate(inputToValidate)
-        if (errors.length) {
-            throw new Error(`Error validating input: ${errors}`)
-        }
         const useCase = Container.get(GetRecipeDetailUC)
         const response = await useCase.execute(recipeId)
-        res.json(response)
+        return res.status(StatusCodes.OK).json(response)
     } catch (err) {
+        console.log(err.message)
+        if (err.message === "Recipe not found.") {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: err.message })
+        }
         res.status(500).send(err.message)
     }
 }

@@ -15,11 +15,13 @@ app.post("/recipe/:userId", createRecipeHandler)
 app.get("/recipe/:recipeId", getRecipeDetailHandler)
 app.get("/user/:userId", getUserDetailHandler)
 
-const server = app.listen(process.env.PORT || 3003, () => {
-   if (server) {
-      const address = server.address() as AddressInfo;
-      console.log(`Server is running in http://localhost:${address.port}`);
-   } else {
-      console.error(`Failure upon starting server.`);
-   }
-})
+if (process.env.NODE_ENV !== 'test') {
+   const server = app.listen(process.env.PORT || 3003, () => {
+      if (server) {
+         const address = server.address() as AddressInfo;
+         console.log(`Server is running in http://localhost:${address.port}`);
+      } else {
+         console.error(`Failure upon starting server.`);
+      }
+   })
+}
