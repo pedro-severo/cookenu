@@ -8,11 +8,16 @@ import { mapRecipeDTOToRecipeResponse } from "./mapRecipeDTOToRecipeResponse";
 @Service()
 export class RecipeDatabase extends CommonDatabase {
 
+    constructor() {
+        super(),
+        this.table = "recipes"
+    }
+
     async getRecipeById(id: string, userDatabase: UserDatabase): Promise<RecipeResponse> {
         try {
-            const result = await CommonDatabase.connection("recipes").select("*").where("id", id)     
+            const result = await CommonDatabase.connection(this.table).select("*").where("id", id)     
             const recipeDTO: RecipeDTO = result[0]
-            const user = await userDatabase.getUserById(recipeDTO.user_id)
+            const user = await userDatabase.getUser("id", recipeDTO.user_id)
             const recipeResonse = mapRecipeDTOToRecipeResponse(recipeDTO, user.name)
             return recipeResonse 
         } catch(err) {

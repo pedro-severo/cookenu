@@ -19,10 +19,10 @@ export class CreateRecipeUC {
 
     async execute(recipe: Recipe, userId: string): Promise<RecipeResponse> {
         try {
-            const doesUserExist = await this.userDatabase.validateUser(userId)
+            const doesUserExist = await this.userDatabase.checkUserExistenceById(userId)
             if (!doesUserExist) throw new Error ("User not found to create a recipe.")
             const recipeDTO: RecipeDTO = await mapRecipeToRecipeDTO(recipe, userId)
-            const createdRecipeDTO = await this.recipeDatabase.insert("recipes", recipeDTO)
+            const createdRecipeDTO = await this.recipeDatabase.insert(recipeDTO)
             const createdRecipe = await mapRecipeDTOToRecipeResponse(createdRecipeDTO)
             return createdRecipe
         } catch (err) {

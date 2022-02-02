@@ -6,6 +6,8 @@ import dotenv from "dotenv"
 dotenv.config()
 @Service()
 export abstract class CommonDatabase {
+    protected table = ""
+
     protected static connection: Knex = knex({
         client: "mysql",
         connection: {
@@ -18,10 +20,10 @@ export abstract class CommonDatabase {
         }
     })
 
-    async insert(table: string, itemToAdd: any) {
+    async insert(itemToAdd: any) {
         try {
-            await CommonDatabase.connection(table).insert(itemToAdd)
-            const result = await CommonDatabase.connection(table).select("*").where("id", itemToAdd.id)
+            await CommonDatabase.connection(this.table).insert(itemToAdd)
+            const result = await CommonDatabase.connection(this.table).select("*").where("id", itemToAdd.id)
             return result[0]
         } catch (e) {
             throw new Error("Error in insert query.")

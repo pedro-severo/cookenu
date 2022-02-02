@@ -3,10 +3,10 @@ import { plainToClass } from "class-transformer"
 import { validate, ValidationError } from "class-validator"
 import { RequestHandler } from "express"
 import Container from "typedi"
-import { v4 } from "uuid"
 import { Recipe } from "../entities/Recipe"
 import { CreateRecipeUC } from "../useCases/Recipe/createRecipeUC"
 import { CreateRecipeInput } from "./inputs/CreateRecipeInput"
+import { generateId } from '../services/uuid/generateId';
 
 export const createRecipeHandler: RequestHandler = async (req, res) => {
     try {
@@ -21,7 +21,7 @@ export const createRecipeHandler: RequestHandler = async (req, res) => {
                 errors
             })
         }
-        const id = v4()
+        const id = generateId()
         const newRecipe = new Recipe(id, title, description, new Date())
         const useCase = Container.get(CreateRecipeUC)
         const response = await useCase.execute(newRecipe, userId)
