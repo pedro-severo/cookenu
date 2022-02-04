@@ -13,6 +13,8 @@ export class GetUserDetailUC {
     async execute(userId: string): Promise<UserResponse> {
         try {
             const user = await this.userDb.getUser("id", userId)
+            delete user.password
+            delete user.id
             return user
         } catch (err) {
             throw new Error("User not found.");

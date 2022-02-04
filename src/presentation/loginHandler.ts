@@ -22,8 +22,9 @@ export const loginHandler: RequestHandler = async (req, res) => {
     } catch (err) {
         if (err.message === "Error: User not found.") {
             return res.status(StatusCodes.NOT_FOUND).json({ message: err.message })
+        } else if (err.message === "Error: Incorrect password.") {
+            return res.status(StatusCodes.UNAUTHORIZED).json({ message: err.message })
         }
         res.status(500).json({ message: "Internal Server Error"})
-
     }
 }

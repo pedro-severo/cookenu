@@ -20,5 +20,6 @@ describe("getUserDetailHandler test", () => {
         expect(response.status).toBe(StatusCodes.OK)
         expect(response.body.name).toBeTruthy()
         expect(response.body.email).toBeTruthy()
+        expect(response.body.password).toBeUndefined()
     })
 })
