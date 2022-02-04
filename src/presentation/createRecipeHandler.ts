@@ -7,12 +7,20 @@ import { Recipe } from "../entities/Recipe"
 import { CreateRecipeUC } from "../useCases/Recipe/createRecipeUC"
 import { CreateRecipeInput } from "./inputs/CreateRecipeInput"
 import { generateId } from '../services/uuid/generateId';
+import { AuthenticatorManager } from '../services/authentication/AutenticationManager';
 
 export const createRecipeHandler: RequestHandler = async (req, res) => {
     try {
+        const token = req.headers.authorization
+        const authenticator = new AuthenticatorManager()
+        const tokenData = token && authenticator.getTokenData(token)
+        if(!tokenData) {
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "Unauthorized action.",
+            })
+        }
         const { title, description } = req.body
         const { userId } = req.params
-
         const inputToValidate = plainToClass(CreateRecipeInput, { title, description })
         const errors: ValidationError[] = await validate(inputToValidate)
         if (errors.length) {

@@ -1,10 +1,19 @@
 import { RequestHandler } from "express"
 import { StatusCodes } from "http-status-codes"
 import Container from "typedi"
+import { AuthenticatorManager } from "../services/authentication/AutenticationManager"
 import { GetUserDetailUC } from "../useCases/User/gerUserDetailUC"
 
 export const getUserDetailHandler: RequestHandler = async (req, res) => {
     try {
+        const token = req.headers.authorization
+        const authenticator = new AuthenticatorManager()
+        const tokenData = token && authenticator.getTokenData(token)
+        if(!tokenData) {
+            return res.status(StatusCodes.UNAUTHORIZED).json({
+                message: "Unauthorized action.",
+            })
+        }
         const { userId } = req.params
         const useCase = Container.get(GetUserDetailUC)
         const response = await useCase.execute(userId)

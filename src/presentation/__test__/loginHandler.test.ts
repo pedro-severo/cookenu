@@ -56,7 +56,9 @@ describe("testing login endpoint", () => {
 
             const response = await request(server).post('/user/login').send(body)
 
-            expect(response.status).toBe(StatusCodes.OK)    
+            expect(response.status).toBe(StatusCodes.OK)   
+            expect(response.body.id).toBeTruthy()
+            expect(typeof response.body.id).toBe('string')
             expect(response.body.token).toBeTruthy()
             expect(typeof response.body.token).toBe('string')
 

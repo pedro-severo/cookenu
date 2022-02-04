@@ -1,10 +1,9 @@
 import Container, { Service } from "typedi";
-import { UserResponse } from "../../database/User/interfaces/UserResponse";
 import { UserDatabase } from "../../database/User/UserDatabase";
-import { User } from "../../entities/User";
 import { LoginInput } from "../../presentation/inputs/LoginInput";
 import { AuthenticatorManager } from "../../services/authentication/AutenticationManager";
 import { HashManager } from "../../services/hash/HashManager";
+import { LoginResponse } from "./Interfaces/LoginResponse";
 
 @Service()
 export class LoginUC {
@@ -18,7 +17,7 @@ export class LoginUC {
         this.authenticator = new AuthenticatorManager()
     }
 
-    async execute(input: LoginInput): Promise<any> {
+    async execute(input: LoginInput): Promise<LoginResponse> {
         try {
             const { email, password } = input
             const user = await this.userDatabase.getUser("email", email)
@@ -27,7 +26,8 @@ export class LoginUC {
             if (!isPasswordCorrect) throw new Error("Incorrect password.")
             const token = user.id && this.authenticator.generateToken({id: user.id})
             return {
-                token
+                id: user.id as string,
+                token: token as string
             }
         } catch (err) {
             throw new Error(err)

@@ -8,7 +8,7 @@ afterAll(() => server.close());
 describe("getRecipeDetailHandler test", () => {
     const validId = "23d6238a-5522-4698-ade5-d43eb81b5ddb"
     const invalidId = "invalidId"
-    it("Should return a error by invalid recipe id", async () => {
+    it("Should return 404 status code by invalid recipe id", async () => {
         const response = await request(server).get(`/recipe/${invalidId}`)
         expect(response.status).toBe(StatusCodes.NOT_FOUND)
         expect(response.body.message).toBe("Recipe not found.")
